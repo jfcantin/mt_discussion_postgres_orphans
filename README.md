@@ -14,16 +14,18 @@ My deployment scenario was 2 consumers in different deployment pods and 1 subscr
 Receive mode was PartitionedOrdered. 
 
 ## Orphan messages
-Repo: [repository](https://github.com/jfcantin/mt_discussion_postgres_orphans)
+Repo: [repository](https://github.com/jfcantin/mt_discussion_postgres_orphans) using 8.3.5-develop.
 
-- Single assembly:
-  - using publish.batch: after a few times I could see orphan messages
-  - using publish: each time I get orphans
+- In all cases I was able to confirm that all messages were consumed by the consumers, for some reason not all messages get deleted from the message tables.
+- Interestingly using the PublishAsyncService it seems fast enough
 - Separate assemblies:
+  - using synchronous publish: each time I get orphans (Original test case)
   - using publish.batch: no orphans with the current test setup
-  - using publish: each time I get orphans
-- In all cases I was able to confirm that all messages were consumed by the consumers, 
-  for some reason not all messages get deleted from the message tables.
+  - using async publish: no orphans with the current test setup
+- Single assembly:
+  - using synchronous publish: each time I get orphans
+  - using publish.batch: after a few times I could see orphan messages
+  - using async publish: each time I get orphans
 
 I did play with the receive mode and I was able to get orphans for Partitioned and 
 Normal as well. 

@@ -22,13 +22,16 @@ var connectionString = builder.Configuration.GetConnectionString("Transport");
 builder.Services.ConfigureMassTransitWithPostgresTransport(connectionString, configurator =>
 {
     configurator.AddConsumer<MainServiceTestMessageConsumer>();
-    // configurator.AddConsumer<Service_A_SecondTestMessageConsumer>();
+    // configurator.AddConsumer<MainServiceSecondTestMessageConsumer>();
 });
 
-// Using PublishBatch works with both consumer in same assembly and outside
-builder.Services.AddHostedService<PublishBatchService>();
+// Using PublishBatch works with both consumer in different assembly but
+// not when in same assembly.
+// builder.Services.AddHostedService<PublishBatchService>();
 
-// builder.Services.AddHostedService<PublishSynchronousService>();
+builder.Services.AddHostedService<PublishSynchronousService>();
+
+// builder.Services.AddHostedService<PublishAsyncService>();
 
 var app = builder.Build();
 app.Run();
