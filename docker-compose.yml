@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: "postgres"
+    networks:
+      - orphan-network
+    environment:
+      - "POSTGRES_PASSWORD=Password12!"
+    ports:
+      - "5432:5432"
+  resqueue:
+    image: "ghcr.io/filipbekic01/resqueue"
+    ports:
+      - "8080:8080"
+    environment:
+      - "ResQueue:SqlEngine=Postgres"
+      - "SqlTransport:ConnectionString=host=host.docker.internal;database=orphans;Username=postgres;password=Password12!;"
+
+networks:
+  orphan-network:
+    driver: bridge
